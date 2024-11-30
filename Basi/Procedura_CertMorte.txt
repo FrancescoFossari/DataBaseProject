@@ -1,0 +1,52 @@
+PROCEDURA POPOLAMENTO CERTIFICATO MORTE
+
+CREATE OR REPLACE PROCEDURE Inserimento_CertMorte(
+   Numero_certificato  CERTIFICATO_MORTE.NUMERO_CERTIFICATO%TYPE,
+   Data_decesso        CERTIFICATO_MORTE.DATA%TYPE,
+   Causa_morte         CERTIFICATO_MORTE.CAUSA_MORTE%TYPE,
+   Veterinario         CERTIFICATO_MORTE.VETERINARIO%TYPE,
+   Cane         	     CERTIFICATO_MORTE.CANE%TYPE   )
+IS
+   Valore_cane  NUMBER;
+   Codice_certificato         VARCHAR(20);
+   Certificato_non_registrato EXCEPTION;
+   Cane_non_registrato        EXCEPTION;
+BEGIN
+   SELECT CANI.MICROCHIP
+   INTO Valore_cane
+   FROM CANI
+   WHERE CANI.MICROCHIP=Cane;
+IF (Valore_cane is null)THEN 
+    RAISE Cane_non_registrato,
+END IF;
+
+SELECT CERTIFICATO_MORTE.NUMERO_CERTIFICATO
+INTO Codice_certificato
+FROM CERTIFICATO_MORTE
+WHERE CERTIFICATO_MORTE.NUMERO_CERTIFICATO=NUMERO_CERTIFICATO;
+
+IF(Codice_certificato is null) THEN
+RAISE Certificato_non_registrato;
+END IF;
+
+INSERT INTO CERTIFICATO_MORTE VALUES
+(NUMERO_CERTIFICATO,DATA_DECESSO,CAUSA_MORTE,VETERINARIO,CANE)
+
+EXCEPTION
+WHEN Certificato_non_registrato THEN
+RAISE_APPLICATION_ERROR(-20009,'Il certificato non è presente');
+ROLLBACK;
+WHEN Cane_non_registrato THEN
+RAISE_APPLICATION_ERROR(-20010,'Il cane scelto non è stato registrato adeguamente');
+ROLLBACK;
+END Inserimento-CertMorte;
+
+
+
+
+
+
+
+
+   
+   

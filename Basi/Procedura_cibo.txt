@@ -1,0 +1,47 @@
+PROCEDURA POPOLAMENTO CIBO
+ 
+CREATE OR REPLACE PROCEDURE Inserimento_Cibo      (
+Quantità_acquistata   CIBO.QUANTITA_ACQUISTATA%TYPE,
+Marca                 CIBO.MARCA%TYPE,
+Codice_barre          CIBO.CODICE_BARRE%TYPE,
+Tipo_cibo             CIBO.TIPO_CIBO%TYPE,
+Prezzo_prodotto       CIBO.PREZZO_PRODOTTO%TYPE    )
+IS
+  Marca_prodotto  varchar(15);
+  Fornitore       NUMBER;
+  Cibo_non_disponibile EXCEPTION;
+  Azienda_non_trovata EXCEPTION;
+BEGIN
+  SELECT CIBO.MARCA
+  INTO Marca_prodotto
+  FROM CIBO
+  WHERE CIBO.MARCA=Marca;
+IF(Marca_prodotto is null)THEN
+RAISE Cibo_non_disponibile;
+END IF;
+
+  SELECT FORNITORE.PARTITA_IVA
+  INTO Fornitore
+  FROM FORNITORE
+  WHERE FORNITORE.PARTITA_IVA=PARTITA_IVA;
+IF(Fornitore is null)THEN
+RAISE Azienda_non_trovata;
+END IF;
+
+INSERT INTO CIBO VALUES
+(Quantità-acquistata,Marca,Codice_barre,Tipo_cibo,prezzo_prodotto)
+
+EXCEPTION 
+WHEN Cibo_non_disponibile THEN
+RAISE_APPLICATION_ERROR(-20009,'Il Cibo non è disponibile');
+ROLLBACK;
+WHEN Azienda_non_trovata THEN
+RAISE_APPLICATION_ERROR(-20009,'L'azienda non è stata trovata');
+ROLLBACK;
+END Inserimento_Cibo;
+
+
+
+
+
+

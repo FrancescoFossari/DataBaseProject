@@ -1,0 +1,85 @@
+VIEWS N^1
+Per visualizzare la quantità media mensile di cibo rimanente in magazzino.
+
+CREATE VIEW CIBOMEDIOMESE AS
+SELECT QUANTITA ACQUISTATA, QUANTITA CONSUMATA
+AVG(QUANTITA ACQUISTATA - QUANTITA CONSUMATA)*30
+FROM CIBO, NUTRITO
+WHERE QUANTITA ACQUISTATA IS NOT NULL
+
+
+VIEWS N^2
+Per contare tutti i cani disponibili 
+
+CREATE VIEW cani_totali AS
+SELECT NOME, TAGLIA
+   COUNT (ALL NOME) Disponibile
+FROM CANI
+WHERE NOME IS NOT NULL
+
+
+VIEWS N^3
+Per visualizzare i dettagli di tutti gli adottanti
+
+CREATE VIEW adottantitot AS
+SELECT Nome, Cognome, CF
+   COUNT(ALL nome) Totali
+FROM Adottante 
+WHERE Nome IS NOT NULL
+
+
+VIEWS N^4
+Vista per individuare il nome delle aree del canile e il numero totale delle gabbie
+
+CREATE VIEW NumArea AS
+SELECT Nome_area, Numero_gabbie
+  COUNT(ALL Numero_gabbie) GabbieTotali
+FROM Area_Canile
+WHERE Numero_gabbie IS NOT NULL
+
+
+VIEWS N^5
+Vista per vedere tutti i lavoratori 
+
+CREATE VIEW CheckLavoratore AS
+SELECT Nome, Cognome, Badge_Lavoratore 
+FROM Lavoratore
+WHERE Badge_lavoratore IS NOT NULL
+
+
+VIEWS N^6
+Vista per visualizzare tutti i certificati di morte con causa Malnutrizione
+
+CREATE VIEW CertMorte AS
+SELECT Numero_certificato, Data_decesso, Causa_morte, Cane
+FROM Certificato_morte 
+WHERE Causa_morte = "Malnutrizione"
+
+
+VIEWS N^7
+Vista per visualizzare i veterinari della citta di Napoli
+
+CREATE VIEW VeterinariNapoli AS
+SELECT Nome, Cognome, Città, Partita_iva
+FROM Veterinario
+WHERE Città = "Napoli"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
